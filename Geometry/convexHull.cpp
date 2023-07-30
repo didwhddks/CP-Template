@@ -1,23 +1,23 @@
-template <class T>
-vt<Point<T>> getConvexHull(const vt<Point<T>>& pts) {
-	auto cmp=[](const Point<T>& p1, const Point<T>& p2) {
+vector<Point> getConvexHull(vector<Point> pts) {
+	int n=pts.size();
+	auto cmp=[](const Point& p1, const Point& p2) {
 		return p1.x<p2.x||p1.x==p2.x&&p1.y<p2.y;
 	};
-	sort(all(pts), cmp);
-	vt<Point<T>> convexHull;
-	int ptr=0, m;
-	FOR(n) {
-		while(ptr>=2&&(convexHull[ptr-1]-convexHull[ptr-2]).cross(pts[i]-convexHull[ptr-2])<0)
+	sort(pts.begin(), pts.end(), cmp);
+	vector<Point> convexHull;
+	int ptr=0, m=1;
+	for(int i=0; i<n; ++i) {
+		while(ptr>m&&(convexHull[ptr-1]-convexHull[ptr-2]).cross(pts[i]-convexHull[ptr-2])<=0)
 			convexHull.pop_back(), --ptr;
-		convexHull.pb(pts[i]), ++ptr;
+		convexHull.push_back(pts[i]), ++ptr;
 	}
-	m=ptr+1;
-	FOR(i, n-2, -1, -1) {
-		while(ptr>=m&&(convexHull[ptr-1]-convexHull[ptr-2]).cross(pts[i]-convexHull[ptr-2])<0)
+	m=ptr;
+	for(int i=n-2; ~i; --i) {
+		while(ptr>m&&(convexHull[ptr-1]-convexHull[ptr-2]).cross(pts[i]-convexHull[ptr-2])<=0)
 			convexHull.pop_back(), --ptr;
-		convexHull.pb(pts[i]), ++ptr;
+		convexHull.push_back(pts[i]), ++ptr;
 	}
-	if(sz(convexHull)>1) convexHull.pop_back();
+	if((int)convexHull.size()>1) convexHull.pop_back();
 	return convexHull;
 }
 

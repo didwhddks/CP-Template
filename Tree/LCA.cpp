@@ -1,35 +1,38 @@
-const int mxn=1e5+5;
-vt<int> adj[mxn];
-vt<vt<int>> bcc;
-int d[mxn], anc[mxn][19];
-bool vis[2*mxn], act[mxn], cut[mxn];
- 
-void dfs(int u=0, int p=-1) {
-	anc[u][0]=p;
-	FOR(i, 1, 19)
-		anc[u][i]=~anc[u][i-1]?anc[anc[u][i-1]][i-1]:-1;
-	EACH(v, adj[u])
-		if(v^p) {
-			d[v]=d[u]+1;
-			dfs(v, u);
-		}
-}
-
-int jump(int u, int d) {
-	FOR(19)
-		if(d&1<<i)
-			u=anc[u][i];
-	return u;
-}
- 
-int lca(int u, int v) {
-	if(d[u]>d[v])
-		swap(u, v);
-	v=jump(v, d[v]-d[u]);
-	if(u==v)
-		return u;
-	FOR(i, 18, -1, -1)
-		if(anc[u][i]^anc[v][i])
-			u=anc[u][i], v=anc[v][i];
-	return anc[u][0];
-}
+struct LCA {
+  int time = 0, logN;
+  vector<int> tin, tout;
+  vector<vector<int>> adj, anc;
+  void init(int n) {
+    logN = __lg(n);
+    anc.assign(n + 1, vector<int>(logN + 1, 0));
+    tin.assign(n + 1, 0);
+    tout.assign(n + 1, 0);
+    adj.assign(n + 1, vector<int>());
+  }
+  void add_edge(int u, int v) {
+    adj[u].emplace_back(v);
+    adj[v].emplace_back(u);
+  }
+  void dfs(int u = 1, int p = 0) {
+    tin[u] = ++time;
+    anc[u][0] = p;
+    for (int i = 1; i <= logN; ++i) anc[u][i] = anc[anc[u][i - 1]][i - 1];
+    for (int v : adj[u])
+      if (v != p) dfs(v, u);
+    tout[u] = ++time;
+  }
+  void build() {
+    dfs();
+    tout[0] = ++time;
+  }
+  bool is_ancestor(int u, int v) {
+    return tin[u] <= tin[v] && tout[v] <= tout[u];
+  }
+  int query(int u, int v) {
+    if (is_ancestor(u, v)) return u;
+    if (is_ancestor(v, u)) return v;
+    for (int i = logN; ~i; --i)
+      if (!is_ancestor(anc[u][i], v)) u = anc[u][i];
+    return anc[u][0];
+  }
+};

@@ -1,3 +1,47 @@
+#include <bits/stdc++.h>
+using namespace std;
+
+template <typename T>
+struct Point {
+	T x, y;
+	Point(const T& x, const T& y) {
+		this->x = x;
+		this->y = y;
+	}
+
+	Point operator+(const Point<T>& p) const {
+		return Point<T>(x + p.x, y + p.y);
+	}
+
+	Point operator-(const Point<T>& p) const {
+		return Point<T>(x - p.x, y - p.y);
+	}
+
+	Point operator*(const Point<T>& p) const {
+		return Point<T>(x * p.x, y * p.y);
+	}
+
+	Point operator/(const Point<T>& p) const {
+		return Point<T>(x / p.x, y / p.y);
+	}
+
+	bool operator==(const Point<T>& p) const {
+		return x == p.x && y == p.y;
+	}
+
+	T dot(const Point<T>& p) const {
+		return x * p.x + y * p.y;
+	}
+
+	T cross(const Point<T>& p) const {
+		return x * p.y - y * p.x;
+	}
+
+	Point normal() const {
+		return Point<T>(-y, x);
+	}
+};
+
 vector<Point> getConvexHull(vector<Point> pts) {
 	int n=pts.size();
 	auto cmp=[](const Point& p1, const Point& p2) {

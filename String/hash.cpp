@@ -1,21 +1,26 @@
-#define mod 1073676287
-#define ll long long
-const int M=1e9+7, mxn=1e5+5, prime=31;
-/*mod 必須要是質數*/
-ll p[mxn], h[mxn];
-string s;
+struct StringHash {
+	const int mod = 1073676287;
+	const int p = 31;
+	vector<int> prime;
 
-void p_init(int n) { // 0-indexed
-	p[0]=1;
-	FOR(i, 1, n)
-		p[i]=p[i-1]*prime%M;
-}
+	StringHash() {
+		prime.assign(1E6 + 1, 1);
+		for (int i = 1; i <= 1E6; ++i) {
+			prime[i] = 1LL * prime[i - 1] * p % mod;
+		}
+	}
 
-void hash_init(int n) { // 1-indexed
-	FOR(i, 1, n+1)
-		h[i]=(h[i-1]*prime%M+s[i-1])%M;
-}
+	vector<int> hash_init(string s) {
+		const int n = s.size();
+		vector<int> hash(n + 1);
+		for (int i = 1; i <= n; ++i) {
+			hash[i] = (1LL * hash[i - 1] * p % mod + s[i - 1]) % mod;
+		}
+		return hash;
+	}
 
-ll get_hash(int l, int r) { // get hash value of substring
-	return (h[r+1]-h[l]*p[r-l+1]%M+M)%M;
-}
+	int get_hash(int L, int R, vector<int>& hash) {
+		int h = (hash[R + 1] - 1LL * hash[L] * prime[R - L + 1] % mod + mod) % mod;
+		return h;
+	}
+};

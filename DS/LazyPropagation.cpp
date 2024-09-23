@@ -1,10 +1,10 @@
 template <typename Info, typename Tag>
-struct LazySegTree {
+struct LazySegmentTree {
     int n;
     vector<Info> info;
     vector<Tag> tag;
  
-    LazySegTree(int n = 0) {
+    LazySegmentTree(int n = 0) {
         init(n);
     }
  

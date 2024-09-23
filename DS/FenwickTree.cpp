@@ -27,6 +27,9 @@ struct Fenwick {
 	}
 
 	T rangeSum(int L, int R) {
+		if (L > R) {
+			return T();
+		}
 		return query(R) - query(L - 1);
 	}
 };

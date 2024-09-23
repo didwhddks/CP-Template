@@ -10,7 +10,7 @@ struct Trie {
     void init(int n) {
         this->n = n;
         cnt = 0;
-        tr.assign(n, vector<int>(26, 0));
+        tr.assign(n, vector<int>());
         end.assign(n, 0);
     }
 
@@ -18,6 +18,9 @@ struct Trie {
         int u = 0;
         for (char &c : word) {
             int v = c - 'a';
+            if (tr[u].size() == 0) {
+                tr[u] = vector<int>(26);
+            }
             if (!tr[u][v]) {
                 tr[u][v] = ++cnt;
             }
@@ -30,7 +33,7 @@ struct Trie {
         int u = 0;
         for (char &c : word) {
             int v = c - 'a';
-            if (!tr[u][v]) {
+            if (tr[u].size() == 0 || !tr[u][v]) {
                 return false;
             }
             u = tr[u][v];

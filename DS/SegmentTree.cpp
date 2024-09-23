@@ -1,9 +1,9 @@
 template <typename Info>
-struct SegTree {
+struct SegmentTree {
     int n;
     vector<Info> info;
  
-    SegTree(int n = 0) {
+    SegmentTree(int n = 0) {
         init(n);
     }
  

@@ -6,10 +6,22 @@ struct SegmentTree {
     SegmentTree(int n = 0) {
         init(n);
     }
+
+    SegmentTree(const vector<int>& vec) {
+        init(vec);
+    }
  
     void init(int n) {
         this->n = n;
         info.assign(4 * n, Info());
+    }
+
+    void init(const vector<int>& vec) {
+        this->n = vec.size();
+        info.assign(4 * n, Info());
+        for (int i = 0; i < n; ++i) {
+            set(i, Info(vec[i]));
+        }
     }
  
     void pull(int i) {
